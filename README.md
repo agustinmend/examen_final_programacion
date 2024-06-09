@@ -13,9 +13,9 @@ En la imagen podemos observar de manera sencilla como es que funcionara el codig
 ingeniero Jose Jesus - Contribucion con manejo de programacion e ideas para el codigo.
 ingeniero Raiden Makio - Contribucion con manejo de github.
 ## Herramientas utilizadas
-Visual studio Code
-Chat Gpt
-g++
-Git
-Github
-Draw.io
+-Visual studio Code
+-Chat Gpt
+-g++
+-Git
+-Github
+-Draw.io
