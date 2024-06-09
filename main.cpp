@@ -6,8 +6,13 @@
 
 using namespace std;
 
+void Add_map(map<string , string>& BD , string fecha , string evento);
+void Del_map(map<string , string>& BD , string fecha , string evento);
+void Find_map(map<string , string>& BD , string fecha);
+void Print_map(map<string , string>& BD);
+
 int main() {
-    map<string , vector<string>> BD;
+    map<string , string> BD;
     int cantidad = 0;
     string dato = "";
     string entrada;
@@ -19,13 +24,21 @@ int main() {
         getline(cin , entrada);
         for(int i = 0 ; i < entrada.size(); ++i){
             caracter = entrada[i];
-            if(caracter == " " && cantidad == 0) {
+            if(caracter == " " && cantidad == 0 || i + 1 == entrada.size() && cantidad == 0) {
+                if(i + 1 == entrada.size()) {
+                    dato = dato + caracter;
+                    comando = dato;
+                }
                 comando = dato;
                 ++cantidad;
                 dato = "";
                 continue;
             }
-            else if(caracter == " " && cantidad == 1) {
+            else if(caracter == " " && cantidad == 1 || i + 1 == entrada.size() && cantidad ==1) {
+                if(i + 1 == entrada.size()) {
+                    dato = dato + caracter;
+                    fecha = dato;
+                }
                 fecha = dato;
                 ++cantidad;
                 dato = "";
@@ -111,15 +124,14 @@ int main() {
             }
             dato = dato + caracter;
         }
-        cout << calendario << endl;
-        cout << mes << endl;
-        cout << dia << endl;
-        if(calendario == "" || mes == "" || dia == "") {
+        if(calendario == "" && comando != "Print" || mes == "" && comando != "Print" || dia == "" && comando != "Print") {
             cout << "Wrong date format: " << fecha << endl;
         }
-        else {
+        else if(comando != "Print") {
             int month;
             int day;
+            int year;
+            year = stoi(calendario);
             month = stoi(mes);
             day = stoi(dia);
             if(month < 1 || month > 12) {
@@ -128,8 +140,24 @@ int main() {
             else if(day < 1 || day > 31) {
                 cout << "Day value is invalid: " << day << endl;
             }
+            else if(year < 1000) {
+                for(int i = 0 ; calendario.size() != 4 ; ++i) {
+                    calendario = "0" + calendario;
+                }
+                if(month < 10) {
+                    mes = "0" + mes;
+                    if(day < 10) {
+                        dia = "0" + dia;
+                    }
+                }
+            }
+            fecha = calendario + "-" + mes + "-" + dia;
         }
+        cout << fecha << endl;
     }
 
     return 0;
+}
+void Add_map(map<string , string>& BD , string fecha , string evento) {
+    BD[fecha] = evento;
 }
