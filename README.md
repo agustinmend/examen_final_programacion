@@ -6,4 +6,16 @@ Una base de datos es una recopilación organizada de información o datos estruc
 Este repositorio tiene entre sus archivos uno llamado main donde se ve el avanze del codigo mas detalle de lo q se a hecho, tambien cuenta con explicacion mas sencilla del codigo mas abajo.
 ## Descripcion de las funciones
 En este codigo crearemos diversas funciones entre las cuales tenemos un sistema de errores que indicara cuando no hayamos colocado bien alguna instruccion o fecha esta mostrara un mensaje indicando el error del usuario, tambien tenemos la funcion para añadir eventos a la base de dato en la cual si ingresamos bien los datos estos se guardaran en la base de datos, si queremos eliminar algo de la base de datos tenemos la funcion DEL que si el usuario ingresa fecha pero no evento esta eliminara todo lo q paso en esa fecha de la base de datos más si el usuario acompaña esta con un evento esta eliminara el evento ocurrido de la base de datos, si queremos ver los eventos ocurridos en una fecha usamos la funcion FIND que nos mostrara todos los eventos ocurridos en dicha fecha, por ultimo para ver todos los datos guardados usamos Print.
+## Diagrama de flujo
 ![image](https://github.com/agustinmend/examen_final_programacion/assets/160260035/36f3414d-b275-43f1-a323-6f1b633a0d60)
+En la imagen podemos observar de manera sencilla como es que funcionara el codigo donde el dependiendo de lo que ingrese el usuario es como funcionara el programa
+## Creditos
+ingeniero Jose Jesus - Contribucion con manejo de programacion e ideas para el codigo.
+ingeniero Raiden Makio - Contribucion con manejo de github.
+## Herramientas utilizadas
+Visual studio Code
+Chat Gpt
+g++
+Git
+Github
+Draw.io
