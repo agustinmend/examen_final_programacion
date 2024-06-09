@@ -6,14 +6,18 @@
 
 using namespace std;
 
-void Add_map(map<string , string>& BD , string fecha , string evento);
-void Del_map(map<string , string>& BD , string fecha , string evento);
-void Find_map(map<string , string>& BD , string fecha);
-void Print_map(map<string , string>& BD);
+void Add_map(map<string , vector<string>>& BD , string fecha , string evento);
+void Del_map(map<string , vector<string>>& BD , string fecha , string evento);
+void Find_map(map<string , vector<string>>& BD , string fecha);
+void Print_map(map<string , vector<string>>& BD);
+void Ordenar_map(map<string , vector<string>>& BD);
 
 int main() {
-    map<string , string> BD;
+    map<string , vector<string>> BD;
+    BD[""] = {""};
     int cantidad = 0;
+    int controlador = 0;
+    int controlador2 = 0;
     string dato = "";
     string entrada;
     string comando;
@@ -52,7 +56,6 @@ int main() {
         }
         dato = "";
         cantidad = 0;
-        int controlador = 0;
         string calendario = "";
         string mes = "";
         string dia = "";
@@ -150,14 +153,68 @@ int main() {
                         dia = "0" + dia;
                     }
                 }
+                else if(day < 10) {
+                    dia = "0" + dia;
+                }
+            }
+            else if(month < 10) {
+                mes = "0" + mes;
+                if(day < 10) {
+                    dia = "0" + dia;
+                }
+            }
+            else if(day < 10) {
+                dia = "0" + dia;
             }
             fecha = calendario + "-" + mes + "-" + dia;
+            if(comando == "Add") {
+                Add_map(BD , fecha , evento);
+            }
         }
         cout << fecha << endl;
+        Print_map(BD);
+        dato = "";
+        fecha = "";
+        evento = "";
+        cantidad = 0;
+        controlador = 0;
     }
 
     return 0;
 }
-void Add_map(map<string , string>& BD , string fecha , string evento) {
-    BD[fecha] = evento;
+void Add_map(map<string , vector<string>>& BD , string fecha , string evento) {
+    vector<string> v;
+    for(const auto& item : BD) {
+        if(item.first == fecha) {
+            for(const auto& elementos : item.second) {
+                if(elementos == evento) {
+                    break;
+                }
+                v = item.second;
+                v.push_back(evento);
+                BD[fecha] = v;
+                break;
+            }
+        }
+        v.push_back(evento);
+        BD[fecha] = v;
+        break;
+    }
+}
+
+void Print_map(map<string , vector<string>>& BD) {
+    for(const auto& item : BD) {
+        for(const auto& elementos : item.second) {
+            if(item.first == "" ) {
+                continue;
+            }
+            else {
+            cout << item.first << ": " << elementos << endl;
+            }
+        }
+    }
+}
+
+void Ordenar_map(map<string , vector<string>>& BD) {
+
 }
