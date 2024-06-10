@@ -6,9 +6,9 @@
 
 using namespace std;
 
-void Add_map(map<string , vector<string>>& BD , string fecha , string evento);
-void Del_map(map<string , vector<string>>& BD , string fecha , string evento);
-void Find_map(map<string , vector<string>>& BD , string fecha);
+void Add_map(map<string , vector<string>>& BD , const string fecha , const string evento);
+void Del_map(map<string , vector<string>>& BD , const string fecha , const string evento);
+void Find_map(map<string , vector<string>>& BD , const string fecha);
 void Print_map(map<string , vector<string>>& BD);
 void Ordenar_map(map<string , vector<string>>& BD);
 
@@ -18,6 +18,7 @@ int main() {
     int cantidad = 0;
     int controlador = 0;
     int controlador2 = 0;
+    int controlador4 = 0;
     string dato = "";
     string entrada;
     string comando;
@@ -55,6 +56,7 @@ int main() {
             dato = dato + caracter;
         }
         dato = "";
+        int controlador3 = 0;
         cantidad = 0;
         string calendario = "";
         string mes = "";
@@ -77,8 +79,9 @@ int main() {
                         ++cantidad;
                     }
                 }
-                if(cantidad > 2) {
+                if(cantidad > 2 && controlador3 == 0) {
                     cout << "Wrong date format: " << fecha << endl;
+                    ++controlador3;
                     break;
                 }
                 else {
@@ -98,8 +101,9 @@ int main() {
                                     ++cantidad;
                                 }
                             }
-                            if(cantidad > 2) {
+                            if(cantidad > 2 && controlador3 == 0) {
                                 cout << "Wrong date format: " << fecha << endl;
+                                ++controlador3;
                                 break;
                             }
                             else {
@@ -127,10 +131,12 @@ int main() {
             }
             dato = dato + caracter;
         }
-        if(calendario == "" && comando != "Print" || mes == "" && comando != "Print" || dia == "" && comando != "Print") {
+        if(calendario == "" && comando != "Print" && controlador3 == 0 || mes == "" && comando != "Print" && controlador3 == 0 || dia == "" && comando != "Print" && controlador3 == 0) {
             cout << "Wrong date format: " << fecha << endl;
+            ++controlador3;
+            continue;
         }
-        else if(comando != "Print") {
+        else if(comando != "Print" && controlador3 == 0) {
             int month;
             int day;
             int year;
@@ -139,73 +145,83 @@ int main() {
             day = stoi(dia);
             if(month < 1 || month > 12) {
                 cout << "Month value is invalid: " << month << endl;
+                ++controlador4;
             }
             else if(day < 1 || day > 31) {
                 cout << "Day value is invalid: " << day << endl;
+                ++controlador4;
             }
-            else if(year < 1000) {
+            else if(calendario.size() < 4 && year < 1000) {
                 for(int i = 0 ; calendario.size() != 4 ; ++i) {
                     calendario = "0" + calendario;
                 }
-                if(month < 10) {
+                if(mes.size() < 2 && month < 10) {
                     mes = "0" + mes;
-                    if(day < 10) {
+                    if(dia.size() < 2) {
                         dia = "0" + dia;
                     }
                 }
-                else if(day < 10) {
+                else if(dia.size() < 2 && day < 10) {
                     dia = "0" + dia;
                 }
             }
-            else if(month < 10) {
+            else if(mes.size() < 2 && month < 10) {
                 mes = "0" + mes;
-                if(day < 10) {
+                if(dia.size() < 2 && day < 10) {
                     dia = "0" + dia;
                 }
             }
-            else if(day < 10) {
+            else if(dia.size() < 2 && day < 10) {
                 dia = "0" + dia;
             }
             fecha = calendario + "-" + mes + "-" + dia;
-            if(comando == "Add") {
+            if(comando == "Add" && controlador3 == 0 && controlador4 == 0) {
                 Add_map(BD , fecha , evento);
             }
+            else if(comando == "Del") {
+                Del_map(BD, fecha , evento);
+            }
+            else if(comando == "Find") {
+                Ordenar_map(BD);
+                Find_map(BD , fecha);
+            }
         }
-        cout << fecha << endl;
-        Print_map(BD);
+        else if(comando == "Print") {
+            Ordenar_map(BD);
+            Print_map(BD);
+        }
         dato = "";
         fecha = "";
         evento = "";
         cantidad = 0;
         controlador = 0;
+        controlador2 = 0;
+        controlador3 = 0;
+        controlador4 = 0;
     }
 
     return 0;
 }
-void Add_map(map<string , vector<string>>& BD , string fecha , string evento) {
-    vector<string> v;
-    for(const auto& item : BD) {
+void Add_map(map<string , vector<string>>& BD , const string fecha , const string evento) {
+    int cuenta = 0;
+    for(auto& item : BD) {
         if(item.first == fecha) {
-            for(const auto& elementos : item.second) {
-                if(elementos == evento) {
-                    break;
+            for(int i = 0 ; i < item.second.size() ; ++i) {
+                if(item.second[i] == evento) {
+                    ++cuenta;
                 }
-                v = item.second;
-                v.push_back(evento);
-                BD[fecha] = v;
-                break;
             }
         }
-        v.push_back(evento);
-        BD[fecha] = v;
-        break;
+    }
+    if(cuenta == 0) {
+        BD[fecha].push_back(evento);
     }
 }
 
 void Print_map(map<string , vector<string>>& BD) {
     for(const auto& item : BD) {
         for(const auto& elementos : item.second) {
-            if(item.first == "" ) {
+            if(item.first == ""  || elementos == "") {
                 continue;
             }
             else {
@@ -216,5 +232,62 @@ void Print_map(map<string , vector<string>>& BD) {
 }
 
 void Ordenar_map(map<string , vector<string>>& BD) {
+    string almacen;
+    for(auto& item : BD) {
+        for(int i = 0 ; i < item.second.size() ; ++i) {
+            for(int j = 0 ; j < item.second.size() - 1; ++j) {
+                if(item.second[j] > item.second[j + 1] && item.second[j] != "") {
+                    almacen = item.second[j];
+                    item.second[j] = item.second[j+1];
+                    item.second[j+1] = almacen;
+                }
+            }
+        }
+    }
+}
 
+void Del_map(map<string , vector<string>>& BD , const string fecha , const string evento) {
+    int n = 0;
+    if( evento == "") {
+        for(auto& item : BD) {
+            if(item.first == fecha) {
+                for(int i = 0; i < item.second.size() ; ++i ) {
+                    if(item.second[i] != "") {
+                        item.second[i] = "";
+                        ++n;
+                    }
+                }
+            }
+        }
+        cout << "Deleted " << n << " events" << endl;
+    }
+    else {
+        for(auto& item : BD) {
+            if(item.first == fecha) {
+                for( int i = 0 ; i < item.second.size() ; ++i ) {
+                    if(item.second[i] == evento) {
+                        item.second[i] = "";
+                        cout << "Deleted successfully" << endl;
+                        break;
+                    }
+                    else if(i + 1 == item.second.size()){
+                        cout << "Event not found" << endl;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Find_map(map<string , vector<string>>& BD , const string fecha) {
+    for(auto& item : BD) {
+        if (item.first == fecha) {
+            for(int i = 0 ; i < item.second.size() ; ++i) {
+                if(item.second[i] != "") {
+                    cout << item.second[i] << endl;;
+                }
+            }
+        }
+    }
 }
